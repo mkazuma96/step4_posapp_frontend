@@ -1,0 +1,9 @@
+# Azureポータルで設定するスタートアップコマンド
+# App Service > 構成 > 全般設定 > スタートアップコマンド に以下を設定：
+
+node server.js
+
+# または
+
+npm start
+
