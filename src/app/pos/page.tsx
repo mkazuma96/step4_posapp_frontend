@@ -68,6 +68,7 @@ export default function PosPage() {
   const stopScan = () => {
     setScanning(false);
     try {
+      // @ts-ignore - reset() method exists but not in type definitions
       codeReader.reset();
     } catch {}
   };
@@ -100,7 +101,10 @@ export default function PosPage() {
     })();
     return () => {
       cancelled = true;
-      try { codeReader.reset(); } catch {}
+      try { 
+        // @ts-ignore - reset() method exists but not in type definitions
+        codeReader.reset(); 
+      } catch {}
     };
   }, [scanning]);
 
