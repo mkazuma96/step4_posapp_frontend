@@ -11,6 +11,7 @@ export default function PosPage() {
   const [lookup, setLookup] = useState<ProductOut | null>(null);
   const [janError, setJanError] = useState<string | null>(null);
   const [scanning, setScanning] = useState(false);
+  const [scannedCode, setScannedCode] = useState<string | null>(null); // デバッグ用
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const codeReader = useMemo(() => new BrowserMultiFormatReader(), []);
 
@@ -88,8 +89,12 @@ export default function PosPage() {
             if (!result || cancelled) return;
             const text = result.getText();
             console.log("バーコード検出:", text); // デバッグログ
-            addJan(text);
-            stopScan();
+            setScannedCode(text); // 画面に表示
+            setTimeout(() => {
+              addJan(text);
+              stopScan();
+              setScannedCode(null);
+            }, 1500); // 1.5秒表示してから追加
           }
         );
       } catch (e) {
@@ -376,6 +381,29 @@ export default function PosPage() {
                   この枠内にバーコードを配置
                 </div>
               </div>
+              {/* バーコード検出表示 */}
+              {scannedCode && (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: "50%",
+                    left: "50%",
+                    transform: "translate(-50%, -50%)",
+                    backgroundColor: "rgba(0, 255, 0, 0.95)",
+                    color: "#000",
+                    padding: "20px 40px",
+                    borderRadius: 12,
+                    fontSize: 18,
+                    fontWeight: 700,
+                    textAlign: "center",
+                    zIndex: 10,
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.5)",
+                  }}
+                >
+                  <div>✓ 読み取り成功！</div>
+                  <div style={{ marginTop: 8, fontSize: 16 }}>{scannedCode}</div>
+                </div>
+              )}
             </div>
             <button
               onClick={stopScan}
