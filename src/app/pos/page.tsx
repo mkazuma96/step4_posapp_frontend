@@ -116,8 +116,8 @@ export default function PosPage() {
 
           <div className="card grid" style={{ gap: 8 }}>
             <div className="grid">
-              <button onClick={scanning ? stopScan : startScan}>
-                {scanning ? "スキャン停止" : "カメラでスキャン"}
+              <button onClick={startScan}>
+                カメラでスキャン
               </button>
             </div>
             <div className="row">
@@ -186,13 +186,6 @@ export default function PosPage() {
                   追加
                 </button>
               </div>
-            </div>
-
-            <div className="card" style={{ display: scanning ? 'block' : 'none' }}>
-              <div className="muted" style={{ marginBottom: 6 }}>
-                スキャン中（カメラへのアクセス許可が必要です）
-              </div>
-              <video ref={videoRef} style={{ width: "100%", maxHeight: 300 }} />
             </div>
           </div>
 
@@ -300,6 +293,108 @@ export default function PosPage() {
           </div>
         </div>
       </div>
+
+      {/* カメラスキャンモーダル */}
+      {scanning && (
+        <div
+          style={{
+            position: "fixed",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: "rgba(0, 0, 0, 0.9)",
+            zIndex: 9999,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <div
+            style={{
+              width: "90%",
+              maxWidth: 600,
+              backgroundColor: "#fff",
+              borderRadius: 16,
+              padding: 24,
+              display: "flex",
+              flexDirection: "column",
+              gap: 16,
+            }}
+          >
+            <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>スキャン（カメラ）</h2>
+            <p style={{ margin: 0, color: "#666", fontSize: 14 }}>
+              バーコードを緑の枠内に配置してください
+            </p>
+            <div
+              style={{
+                position: "relative",
+                width: "100%",
+                aspectRatio: "4/3",
+                backgroundColor: "#000",
+                borderRadius: 8,
+                overflow: "hidden",
+              }}
+            >
+              <video
+                ref={videoRef}
+                style={{
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                }}
+              />
+              {/* スキャンガイドライン */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  width: "80%",
+                  height: "60%",
+                  border: "3px solid #00ff00",
+                  borderRadius: 8,
+                  boxShadow: "0 0 0 9999px rgba(0, 0, 0, 0.5)",
+                }}
+              >
+                <div
+                  style={{
+                    position: "absolute",
+                    bottom: -40,
+                    left: "50%",
+                    transform: "translateX(-50%)",
+                    color: "#fff",
+                    fontSize: 14,
+                    fontWeight: 600,
+                    whiteSpace: "nowrap",
+                    textShadow: "0 2px 4px rgba(0,0,0,0.8)",
+                  }}
+                >
+                  この枠内にバーコードを配置
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={stopScan}
+              style={{
+                width: "100%",
+                padding: "14px 24px",
+                fontSize: 16,
+                fontWeight: 600,
+                backgroundColor: "#dc2626",
+                color: "#fff",
+                border: "none",
+                borderRadius: 8,
+                cursor: "pointer",
+              }}
+            >
+              スキャンを終了
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
