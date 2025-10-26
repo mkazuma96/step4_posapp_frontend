@@ -87,12 +87,13 @@ export default function PosPage() {
           (result) => {
             if (!result || cancelled) return;
             const text = result.getText();
+            console.log("バーコード検出:", text); // デバッグログ
             addJan(text);
             stopScan();
           }
         );
       } catch (e) {
-        console.error(e);
+        console.error("カメラエラー:", e);
         alert(
           "カメラの起動に失敗しました。ブラウザのカメラ許可設定とHTTPS(またはlocalhost)でのアクセスをご確認ください。"
         );
