@@ -253,13 +253,20 @@ export default function PosPage() {
                   alert("カートが空です");
                   return;
                 }
-                const lines = cart.items.map((i) => `${i.name} / ${i.janCode} × ${i.quantity} = ¥${i.subTotalInclTax}`);
+                const lines = cart.items.map((i) => `${i.name} × ${i.quantity}個 = ¥${i.subTotalInclTax.toLocaleString()}`);
                 const tax = cart.totalInclTax - cart.totalExclTax;
-                const ok = confirm(`以下で購入しますか？\n\n${lines.join("\n")}\n\n合計金額: ¥${cart.totalInclTax}\n内消費税10%: ¥${tax}`);
+                const ok = confirm(`以下で購入しますか？\n\n${lines.join("\n")}\n\n合計金額: ¥${cart.totalInclTax.toLocaleString()}\n内消費税10%: ¥${tax.toLocaleString()}`);
                 if (!ok) return;
+                
+                // 購入前のカート情報を保存
+                const purchasedItems = cart.items.map((i) => `${i.name} × ${i.quantity}個 = ¥${i.subTotalInclTax.toLocaleString()}`);
+                const totalInclTax = cart.totalInclTax;
+                const totalTax = cart.totalInclTax - cart.totalExclTax;
+                
                 try {
                   const result: PurchaseOut = await api.createPurchase();
-                  alert(`購入が完了しました。注文ID: ${result.id}`);
+                  // 購入完了メッセージに商品詳細を含める
+                  alert(`購入が完了しました！\n\n【購入内容】\n${purchasedItems.join("\n")}\n\n合計金額: ¥${totalInclTax.toLocaleString()}\n内消費税10%: ¥${totalTax.toLocaleString()}\n\n注文ID: ${result.id}`);
                   const c = await api.getCart();
                   setCart(c);
                 } catch (e: any) {
