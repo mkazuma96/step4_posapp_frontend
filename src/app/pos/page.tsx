@@ -118,7 +118,7 @@ export default function PosPage() {
     <div className="app-page">
       <div className="phone">
         <div className="grid pos-root" style={{ gap: 12 }}>
-          <h1>モバイルPOS</h1>
+          <h1>モバイルPOS <span style={{ fontSize: 12, color: "#666" }}>v2.0</span></h1>
 
           <div className="card grid" style={{ gap: 8 }}>
             <div className="grid">
@@ -148,7 +148,10 @@ export default function PosPage() {
                 </div>
                 <button
                   onClick={() => {
-                    const input = prompt("個数を入力", "1");
+                    const input = prompt(
+                      `${lookup.name}\n単価: ¥${lookup.priceInclTax.toLocaleString()}\n\n個数を入力してください`,
+                      "1"
+                    );
                     if (input == null) return;
                     const qty = Number(input);
                     if (!Number.isInteger(qty) || qty <= 0) {
@@ -177,7 +180,14 @@ export default function PosPage() {
                 <button
                   onClick={() => {
                     if (!selectedJan) return;
-                    const input = prompt("個数を入力", "1");
+                    // 選択された商品の情報を取得
+                    const selectedProduct = products.find(p => p.janCode === selectedJan);
+                    if (!selectedProduct) return;
+                    
+                    const input = prompt(
+                      `${selectedProduct.name}\n単価: ¥${selectedProduct.priceInclTax.toLocaleString()}\n\n個数を入力してください`,
+                      "1"
+                    );
                     if (input == null) return;
                     const qty = Number(input);
                     if (!Number.isInteger(qty) || qty <= 0) {
